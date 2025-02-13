@@ -35,6 +35,21 @@ pipeline {
                 '''
             }
         }
+        stage('E2E'){
+            agent{
+                docker{
+                    image 'docker pull mcr.microsoft.com/playwright:v1.50.1-noble'
+                    reuseNode true
+                }
+            }
+            steps{
+                sh '''
+                    npm install -g serve
+                   valentineUdemy/learn-jenkins-app/node_modules/.bin/serve serve -s build
+                    npx playwrite test
+                '''
+            }
+        }
 
     }
 }
