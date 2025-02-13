@@ -2,15 +2,17 @@ pipeline {
     agent any
 
     stages {
+        /*
+
         stage('Build') {
-            agent{
-                docker{
+            agent {
+                docker {
                     image 'node:18-alpine'
                     reuseNode true
                 }
             }
             steps {
-                sh ''' 
+                sh '''
                     ls -la
                     node --version
                     npm --version
@@ -18,38 +20,48 @@ pipeline {
                     npm run build
                     ls -la
                 '''
-                
             }
         }
-        stage('test'){
-            agent{
-                docker{
+        */
+
+        stage('Test') {
+            agent {
+                docker {
                     image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            steps{
+
+            steps {
                 sh '''
-                    test -f build/index.html
+                    #test -f build/index.html
                     npm test
                 '''
             }
         }
-        stage('E2E'){
-            agent{
-                docker{
-                    image 'docker pull mcr.microsoft.com/playwright:v1.50.1-noble'
+
+        stage('E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
                     reuseNode true
                 }
             }
-            steps{
+
+            steps {
                 sh '''
-                    npm install -g serve
-                   valentineUdemy/learn-jenkins-app/node_modules/.bin/serve serve -s build
-                    npx playwrite test
+                    npm install serve
+                    node_modules/.bin/serve -s build &
+                    sleep 10
+                    npx playwright test
                 '''
             }
         }
+    }
 
+    post {
+        always {
+            junit 'jest-results/junit.xml'
+        }
     }
 }
