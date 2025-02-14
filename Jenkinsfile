@@ -48,7 +48,7 @@ pipeline {
             steps {
                 sh '''
                     npm install -g serve
-                    serve -s build
+                    learn-jenkins-app/node_modules/.bin/semver/serve -s build
                     npx playwright test
                     
                 '''
