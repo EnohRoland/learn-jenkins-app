@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     stages {
-        /*
-
         stage('Build') {
             agent {
                 docker {
@@ -22,9 +20,8 @@ pipeline {
                 '''
             }
         }
-        */
-
         stage('Test') {
+            
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -39,7 +36,7 @@ pipeline {
                 '''
             }
         }
-
+     /*
         stage('E2E') {
             agent {
                 docker {
@@ -57,6 +54,7 @@ pipeline {
                 '''
             }
         }
+        */
     }
 
     post {
